@@ -3,6 +3,8 @@ package com.dkds.payment_processor.user_service.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Collection;
+
 @Data
 @Entity
 @Table(name = "\"user\"")
@@ -21,4 +23,8 @@ public class User {
     private String email;
 
     private Double walletBalance = 0.0;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Collection<String> roles;
+
 }

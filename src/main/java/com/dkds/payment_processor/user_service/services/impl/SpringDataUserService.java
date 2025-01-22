@@ -7,13 +7,11 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Slf4j
-@Scope("prototype") // adding here to check the behavior of different scopes
 @Service
 public class SpringDataUserService implements UserService {
 
