@@ -17,8 +17,13 @@ import java.util.Optional;
 @Service
 public class SpringDataUserService implements UserService {
 
+    private final UserRepository userRepository;
+
+    // constructor injection is more test friendly and shows the dependencies of the class more clearly
     @Autowired
-    private UserRepository userRepository;
+    public SpringDataUserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostConstruct
     public void init() {
