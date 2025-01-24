@@ -3,14 +3,11 @@ package com.dkds.payment_processor.user_service.controllers;
 import com.dkds.payment_processor.user_service.config.JwtUtil;
 import com.dkds.payment_processor.user_service.entities.User;
 import com.dkds.payment_processor.user_service.services.UserService;
-import com.dkds.payment_processor.user_service.services.impl.SpringDataUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
@@ -38,7 +35,7 @@ public class UserControllerTest {
         mockUser.setUsername(testUsername);
         when(userService.findUserByUsername(testUsername)).thenReturn(Optional.of(mockUser));
 
-        mockMvc.perform(get("/api/users/" + testUsername))
+        mockMvc.perform(get("/api/users/" + testUsername).header("Authorization", "Bearer your-jwt-token"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value(testUsername));
     }
