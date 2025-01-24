@@ -7,6 +7,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,11 +17,13 @@ import java.util.Optional;
 public class SpringDataUserService implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // constructor injection is more test friendly and shows the dependencies of the class more clearly
     @Autowired
-    public SpringDataUserService(UserRepository userRepository) {
+    public SpringDataUserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostConstruct
@@ -35,6 +38,8 @@ public class SpringDataUserService implements UserService {
 
     @Override
     public User registerUser(User user) {
+        String encoded = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encoded);
         return userRepository.save(user);
     }
 
