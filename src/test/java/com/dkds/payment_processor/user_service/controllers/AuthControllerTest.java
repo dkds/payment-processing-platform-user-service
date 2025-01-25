@@ -1,7 +1,7 @@
 package com.dkds.payment_processor.user_service.controllers;
 
 import com.dkds.payment_processor.user_service.config.JwtUtil;
-import com.dkds.payment_processor.user_service.config.TestSecurityConfig;
+import com.dkds.payment_processor.user_service.config.SecurityConfig;
 import com.dkds.payment_processor.user_service.dto.CustomUserDetails;
 import com.dkds.payment_processor.user_service.entities.User;
 import com.dkds.payment_processor.user_service.services.impl.CustomUserDetailsService;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AuthController.class)
-@Import(TestSecurityConfig.class)
+@Import(SecurityConfig.class)
 public class AuthControllerTest {
 
     @Autowired
