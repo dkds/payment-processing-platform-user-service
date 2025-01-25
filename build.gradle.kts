@@ -1,5 +1,6 @@
 plugins {
     java
+    id("jacoco")
     id("org.springframework.boot") version "3.4.1"
     id("io.spring.dependency-management") version "1.1.7"
 }
@@ -43,4 +44,14 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // Ensure tests run before generating the report
+
+    reports {
+        xml.required.set(true) // Enables XML report (useful for CI tools like SonarQube)
+        csv.required.set(false) // Disables CSV report
+        html.required.set(true) // Enables HTML report
+    }
 }
