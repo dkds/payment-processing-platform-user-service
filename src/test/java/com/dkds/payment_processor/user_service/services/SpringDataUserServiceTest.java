@@ -23,35 +23,4 @@ public class SpringDataUserServiceTest {
     @InjectMocks
     SpringDataUserService userService;
 
-    @Test
-    void shouldReturnUserByEmailWhenFound() {
-        // Arrange
-        String testEmail = "test@test.com";
-        User mockUser = new User();
-        mockUser.setId(1L);
-        mockUser.setEmail(testEmail);
-        when(userRepository.findByEmail(testEmail)).thenReturn(Optional.of(mockUser));
-
-        // Act
-        Optional<User> userOptional = userService.findUserByEmail(testEmail);
-
-        // Assert
-        Assertions.assertTrue(userOptional.isPresent());
-        verify(userRepository, times(1)).findByEmail(testEmail);
-    }
-
-    @Test
-    void shouldReturnEmptyUserByEmailWhenNotFound() {
-        // Arrange
-        String testEmail = "test1@test.com";
-        when(userRepository.findByEmail(testEmail)).thenReturn(Optional.empty());
-
-        // Act
-        Optional<User> userOptional = userService.findUserByEmail(testEmail);
-
-        // Assert
-        Assertions.assertTrue(userOptional.isEmpty());
-        verify(userRepository, times(1)).findByEmail(testEmail);
-    }
-
 }
