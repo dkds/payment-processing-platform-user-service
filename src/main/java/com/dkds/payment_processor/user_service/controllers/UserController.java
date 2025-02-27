@@ -1,38 +1,47 @@
 package com.dkds.payment_processor.user_service.controllers;
 
-import com.dkds.payment_processor.user_service.entities.User;
+import com.dkds.payment_processor.user_service.dto.UserDto;
 import com.dkds.payment_processor.user_service.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    // Create User KYC Data
+    @PostMapping("/kyc")
+    public ResponseEntity<UserDto> createKyc(@Valid @RequestBody UserDto request) {
+        return ResponseEntity.ok(userService.createKyc(request));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User savedUser = userService.registerUser(user);
-        return ResponseEntity.ok(savedUser);
+    // Get User KYC by ID
+    @GetMapping("/{id}/kyc")
+    public ResponseEntity<UserDto> getKycById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getKycById(id));
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
-        return userService.findUserByUsername(username)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    // Update User KYC Data
+    @PutMapping("/{id}/kyc")
+    public ResponseEntity<UserDto> updateKyc(@PathVariable Long id, @Valid @RequestBody UserDto request) {
+        return ResponseEntity.ok(userService.updateKyc(id, request));
     }
 
-    @PutMapping("/{id}/wallet")
-    public ResponseEntity<String> updateWallet(@PathVariable Long id, @RequestParam Double amount) {
-        userService.updateWalletBalance(id, amount);
-        return ResponseEntity.ok("Wallet updated successfully");
+    // Upload KYC Documents
+    @PostMapping("/{id}/kyc/documents")
+    public ResponseEntity<UserDto> uploadKyc(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(userService.uploadKycDocument(id, file));
+    }
+
+    // Verify KYC Documents
+    @PostMapping("/{id}/kyc/verify")
+    public ResponseEntity<UserDto> verifyKyc(@PathVariable Long id, @RequestBody KycVerificationRequest request) {
+        return ResponseEntity.ok(userService.verifyKycDocument(id, request));
     }
 }
