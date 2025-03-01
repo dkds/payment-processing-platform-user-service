@@ -5,11 +5,15 @@ import com.dkds.payment_processor.user_service.entities.User;
 import com.dkds.payment_processor.user_service.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
@@ -28,7 +32,11 @@ public class UserController {
 
     @GetMapping("/{id}/kyc")
     public ResponseEntity<UserDto> getKycById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getKycById(id));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("Authenticated user: {}", authentication.getName());
+        User user = userService.getKycById(id);
+        UserDto response = modelMapper.map(user, UserDto.class);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/kyc")

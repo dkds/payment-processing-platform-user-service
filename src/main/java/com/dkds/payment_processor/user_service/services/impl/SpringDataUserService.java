@@ -18,4 +18,9 @@ public class SpringDataUserService implements UserService {
     public User createKyc(User request) {
         return userRepository.save(request);
     }
+
+    @Override
+    public User getKycById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
 }
