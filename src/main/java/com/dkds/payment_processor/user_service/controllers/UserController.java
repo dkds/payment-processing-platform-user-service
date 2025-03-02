@@ -41,7 +41,10 @@ public class UserController {
 
     @PutMapping("/{id}/kyc")
     public ResponseEntity<UserDto> updateKyc(@PathVariable Long id, @Valid @RequestBody UserDto request) {
-        return ResponseEntity.ok(userService.updateKyc(id, request));
+        User user = modelMapper.map(request, User.class);
+        User savedUser = userService.updateKyc(id, user);
+        UserDto response = modelMapper.map(savedUser, UserDto.class);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{id}/kyc/documents")

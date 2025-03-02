@@ -9,4 +9,6 @@ public interface UserService {
     User createKyc(User request);
 
     User getKycById(Long id);
+
+    User updateKyc(Long id, User user);
 }

@@ -23,4 +23,15 @@ public class SpringDataUserService implements UserService {
     public User getKycById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public User updateKyc(Long id, User user) {
+        User existingUser = userRepository.findById(id).orElse(null);
+        if (existingUser == null) {
+            throw new RuntimeException("User not found");
+        }
+        existingUser.setFullName(user.getFullName());
+        existingUser.setAddress(user.getAddress());
+        return userRepository.save(existingUser);
+    }
 }
