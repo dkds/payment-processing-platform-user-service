@@ -1,7 +1,9 @@
 package com.dkds.payment_processor.user_service.controllers;
 
+import com.dkds.payment_processor.user_service.dto.FileDto;
 import com.dkds.payment_processor.user_service.dto.UserDto;
 import com.dkds.payment_processor.user_service.entities.User;
+import com.dkds.payment_processor.user_service.services.StorageService;
 import com.dkds.payment_processor.user_service.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -20,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
+    private final StorageService storageService;
     private final ModelMapper modelMapper;
 
     @PostMapping("/kyc")
@@ -48,8 +55,10 @@ public class UserController {
     }
 
     @PostMapping("/{id}/kyc/documents")
-    public ResponseEntity<UserDto> uploadKyc(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-        return ResponseEntity.ok(userService.uploadKycDocument(id, file));
+    public ResponseEntity<UserDto> uploadKyc(@PathVariable Long id, @RequestParam("files") MultipartFile[] files) {
+        List<FileDto> storedDetails = storageService.store(files);
+        userService.saveDocuments(id, storedDetails);
+        return ResponseEntity.accepted().build();
     }
 
     @PostMapping("/{id}/kyc/verify")
