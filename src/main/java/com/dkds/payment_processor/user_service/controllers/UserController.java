@@ -60,9 +60,4 @@ public class UserController {
         userService.saveDocuments(id, storedDetails);
         return ResponseEntity.accepted().build();
     }
-
-    @PostMapping("/{id}/kyc/verify")
-    public ResponseEntity<UserDto> verifyKyc(@PathVariable Long id, @RequestBody KycVerificationRequest request) {
-        return ResponseEntity.ok(userService.verifyKycDocument(id, request));
-    }
 }
